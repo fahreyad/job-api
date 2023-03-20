@@ -1,2 +1,2 @@
-# taskmanager
-Its a express and mongo api of simple task managment api
+# Job Api
+Its a express and mongo api with auth and job managment
