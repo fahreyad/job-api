@@ -13,7 +13,10 @@ const rateLimiter = require("express-rate-limit");
 const helmet = require("helmet");
 const cors = require("cors");
 const xss = require("xss-clean");
-
+//swagger
+const swaggerUI = require("swagger-ui-express");
+const YMAL = require("yamljs");
+const swaggerFile = YMAL.load("./swagger.yaml");
 //middleware
 app.set("trust proxy", 1);
 app.use(
@@ -31,7 +34,10 @@ app.use(
 app.use(helmet());
 app.use(cors());
 app.use(xss());
-
+app.get("/", (req, res) => {
+  res.send('<a href="/api-doc">Documentation</a> ');
+});
+app.use("/api-doc", swaggerUI.serve, swaggerUI.setup(swaggerFile));
 //router
 app.use("/api/v1/", auth);
 app.use("/api/v1/jobs/", authMiddleware, jobs);
