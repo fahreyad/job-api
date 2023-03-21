@@ -4,7 +4,7 @@ info:
   contact: {}
   version: '1.0'
 servers:
-- url: https://temp-job-service.onrender.com
+- url: https://temp-job-service.onrender.com/api/v1
   variables: {}
 paths:
   /login:
@@ -38,6 +38,45 @@ paths:
           headers: {}
       deprecated: false
       security: []
+  /update-user:
+    patch:
+      tags:
+      - auth
+      summary: update-user
+      operationId: update-user
+      parameters: []
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              required:
+              - email
+              - location
+              - lastName
+              - name
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: demo@test.com
+                location:
+                  type: string
+                  example: india
+                lastName:
+                  type: string
+                  example: what are you
+                name:
+                  type: string
+                  example: fahmewbangladesh
+        required: false
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
   /register:
     post:
       tags:
@@ -58,10 +97,10 @@ paths:
               properties:
                 name:
                   type: string
-                  example: testuser
+                  example: demo
                 email:
                   type: string
-                  example: testuser@test.com
+                  example: demo@test.com
                 password:
                   type: integer
                   format: int32
@@ -101,6 +140,9 @@ paths:
               required:
               - company
               - position
+              - jobLocation
+              - jobType
+              - status
               type: object
               properties:
                 company:
@@ -108,7 +150,16 @@ paths:
                   example: apple
                 position:
                   type: string
-                  example: db
+                  example: db123
+                jobLocation:
+                  type: string
+                  example: Dhaka
+                jobType:
+                  type: string
+                  example: full-time
+                status:
+                  type: string
+                  example: inteview
         required: false
       responses:
         '200':
@@ -117,14 +168,74 @@ paths:
       deprecated: false
       security:
       - bearer: []
-  /user/{id}:
+  /jobs/stats:
+    get:
+      tags:
+      - jobs
+      summary: stats
+      operationId: stats
+      parameters:
+      - name: page
+        in: query
+        description: ''
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          example: 1
+      - name: jobType
+        in: query
+        description: ''
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: intern
+      - name: search
+        in: query
+        description: ''
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: Community
+      - name: sort
+        in: query
+        description: ''
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: z-a
+      - name: status
+        in: query
+        description: ''
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: interview
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+  /jobs/{id}:
     parameters:
       - in: path
         name: id
         schema:
           type: string
         required: true
-        description: The user ID
+        description: The jobs ID
     get:
       tags:
       - jobs
@@ -169,6 +280,7 @@ paths:
       deprecated: false
       security:
       - bearer: []
+
     delete:
       tags:
       - jobs
