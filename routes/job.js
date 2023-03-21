@@ -7,8 +7,15 @@ const {
   singleJobs,
   updateJobs,
   deleteJobs,
+  showStats,
 } = require("../controllers/job");
-router.route("/").get(getJobs).post(createJobs);
-router.route("/:id").get(singleJobs).patch(updateJobs).delete(deleteJobs);
+const testUser = require("../middlewares/testUser");
+router.route("/stats").get(showStats);
+router.route("/").get(getJobs).post(testUser, createJobs);
+router
+  .route("/:id")
+  .get(singleJobs)
+  .patch(testUser, updateJobs)
+  .delete(testUser, deleteJobs);
 
 module.exports = router;

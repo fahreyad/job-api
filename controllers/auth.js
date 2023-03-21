@@ -6,9 +6,15 @@ const jwt = require("jsonwebtoken");
 const register = async (req, res) => {
   const user = await User.create({ ...req.body });
   const token = user.createJWT();
-  res
-    .status(StatusCodes.CREATED)
-    .json({ user: { name: user.getName() }, token });
+  res.status(StatusCodes.CREATED).json({
+    user: {
+      name: user.getName(),
+      email: user.email,
+      location: user.location,
+      lastName: user.lastName,
+      token,
+    },
+  });
 };
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -24,9 +30,40 @@ const login = async (req, res) => {
     throw new Unauthenticate("user unauthenticate");
   }
   const token = user.createJWT();
-  res.status(StatusCodes.OK).json({ user: { name: user.getName() }, token });
+  res.status(StatusCodes.OK).json({
+    user: {
+      name: user.getName(),
+      email: user.email,
+      location: user.location,
+      lastName: user.lastName,
+      token,
+    },
+  });
+};
+const updateUser = async (req, res) => {
+  const { name, lastName, location, email } = req.body;
+  const user = await User.findByIdAndUpdate(req.user.userId, req.body, {
+    new: true,
+    runValidators: true,
+  });
+  // user.name = name;
+  // user.lastName = lastName;
+  // user.email = email;
+  // user.location = location;
+  // await user.save();
+  const token = user.createJWT();
+  res.status(StatusCodes.OK).json({
+    user: {
+      name: user.getName(),
+      email: user.email,
+      location: user.location,
+      lastName: user.lastName,
+      token,
+    },
+  });
 };
 module.exports = {
   register,
   login,
+  updateUser,
 };

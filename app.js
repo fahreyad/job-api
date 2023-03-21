@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 const auth = require("./routes/auth");
 const jobs = require("./routes/job");
 const authMiddleware = require("./middlewares/auth");
-const rateLimiter = require("express-rate-limit");
+
 const helmet = require("helmet");
 const cors = require("cors");
 const xss = require("xss-clean");
@@ -19,12 +19,12 @@ const YMAL = require("yamljs");
 const swaggerFile = YMAL.load("./swagger.yaml");
 //middleware
 app.set("trust proxy", 1);
-app.use(
-  rateLimiter({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
-  })
-);
+// app.use(
+//   rateLimiter({
+//     windowMs: 15 * 60 * 1000, // 15 minutes
+//     max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+//   })
+// );
 app.use(express.json());
 app.use(
   express.urlencoded({

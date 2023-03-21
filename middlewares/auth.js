@@ -13,7 +13,8 @@ const auth = async (req, res, next) => {
     if (!varify) {
       throw new Unauthenticate("user unauthorize");
     }
-    req.user = { userId: varify.id };
+    const testUser = varify.id === "64197f6c51f5ea39246dea0f";
+    req.user = { userId: varify.id, testUser };
     next();
   } catch (error) {
     throw new Unauthenticate("user unauthorize");

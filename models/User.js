@@ -22,8 +22,21 @@ const userSchema = mongoose.Schema({
     minlength: [6, "password value not less then 6"],
     required: [true, "Password is required"],
   },
+  lastName: {
+    type: String,
+    maxlength: 20,
+    trim: true,
+    default: "lastName",
+  },
+  location: {
+    type: String,
+    maxlength: 20,
+    trim: true,
+    default: "my location",
+  },
 });
 userSchema.pre("save", async function () {
+  //if (!this.isModified("password")) return;
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
